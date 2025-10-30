@@ -2,6 +2,41 @@
   const qs = (s, r = document) => r.querySelector(s);
   const qsa = (s, r = document) => Array.from(r.querySelectorAll(s));
 
+  // Toast config
+  const TOAST_DEFAULTS = { duration: 3000, position: "br", type: "info" }; // positions: br, bl, tr, tl
+  function getToastContainer(position = TOAST_DEFAULTS.position) {
+    let c = qs(".toast-container");
+    if (!c) {
+      c = document.createElement("div");
+      c.className = "toast-container";
+      c.setAttribute("aria-live", "polite");
+      c.setAttribute("aria-atomic", "true");
+      document.body.appendChild(c);
+    }
+    // apply position class
+    c.classList.remove("br", "bl", "tr", "tl");
+    c.classList.add(position);
+    return c;
+  }
+  function showToast(message = "Ação realizada com sucesso!", opts = {}) {
+    const {
+      duration = TOAST_DEFAULTS.duration,
+      position = TOAST_DEFAULTS.position,
+      type = TOAST_DEFAULTS.type,
+    } = opts;
+    const container = getToastContainer(position);
+    const t = document.createElement("div");
+    t.className = `toast toast--${type}`;
+    t.textContent = message;
+    container.appendChild(t);
+    // force reflow
+    void t.offsetWidth;
+    t.classList.add("show");
+    const hideAt = Math.max(1000, duration - 500);
+    setTimeout(() => t.classList.remove("show"), hideAt);
+    setTimeout(() => t.remove(), duration);
+  }
+
   // Mobile menu toggle
   const toggle = qs(".navbar__toggle");
   const menu = qs(".menu");
@@ -33,43 +68,56 @@
     });
   });
 
-  function getToastContainer() {
-    let c = qs(".toast-container");
-    if (!c) {
-      c = document.createElement("div");
-      c.className = "toast-container";
-      c.setAttribute("aria-live", "polite");
-      c.setAttribute("aria-atomic", "true");
-      document.body.appendChild(c);
-    }
-    return c;
-  }
-  function showToast(message = "Ação realizada com sucesso!") {
-    const container = getToastContainer();
-    const t = document.createElement("div");
-    t.className = "toast";
-    t.textContent = message;
-    container.appendChild(t);
-    // force reflow
-    void t.offsetWidth;
-    t.classList.add("show");
-    setTimeout(() => {
-      t.classList.remove("show");
-    }, 2500);
-    setTimeout(() => {
-      t.remove();
-    }, 3000);
-  }
+  // Quick demo bindings
   qsa("[data-toast]").forEach((btn) =>
-    btn.addEventListener("click", () => showToast())
+    btn.addEventListener("click", () =>
+      showToast("Exemplo de toast", { type: "info" })
+    )
   );
 
-  const backdrop = qs("[data-backdrop]");
+  function getBackdrop() {
+    let b = qs("[data-backdrop]");
+    if (!b) {
+      b = document.createElement("div");
+      b.className = "modal-backdrop";
+      b.setAttribute("data-backdrop", "");
+      document.body.appendChild(b);
+    }
+    return b;
+  }
+  function ensureModal(sel) {
+    let m = qs(sel);
+    if (!m && sel === "#doacaoModal") {
+      // Cria modal de doação padrão se não existir (útil quando SPA inicia em outra página)
+      m = document.createElement("div");
+      m.id = "doacaoModal";
+      m.className = "modal";
+      m.setAttribute("role", "dialog");
+      m.setAttribute("aria-modal", "true");
+      m.setAttribute("aria-hidden", "true");
+      m.innerHTML = `
+        <div class="modal__dialog">
+          <div class="modal__header">
+            <h4 class="h3" id="tituloModal">Faça sua doação</h4>
+          </div>
+          <div class="modal__body">
+            <p>Com sua contribuição, conseguimos ampliar o alcance dos nossos projetos.</p>
+          </div>
+          <div class="modal__footer flex justify-between">
+            <button class="btn btn--light" data-close-modal>Fechar</button>
+            <a class="btn" href="cadastro.html">Continuar</a>
+          </div>
+        </div>`;
+      document.body.appendChild(m);
+    }
+    return m;
+  }
   function openModal(sel) {
-    const modal = qs(sel);
+    const modal = ensureModal(sel);
     if (!modal) return;
     modal.style.display = "flex";
-    if (backdrop) backdrop.style.display = "block";
+    const backdrop = getBackdrop();
+    backdrop.style.display = "block";
     modal.setAttribute("aria-hidden", "false");
   }
   function closeModal() {
@@ -77,25 +125,97 @@
       m.style.display = "none";
       m.setAttribute("aria-hidden", "true");
     });
-    if (backdrop) backdrop.style.display = "none";
+    const backdrop = getBackdrop();
+    backdrop.style.display = "none";
   }
-  qsa("[data-open-modal]").forEach((btn) =>
-    btn.addEventListener("click", () =>
-      openModal(btn.getAttribute("data-open-modal"))
-    )
-  );
-  qsa("[data-close-modal]").forEach((btn) =>
-    btn.addEventListener("click", closeModal)
-  );
-  if (backdrop) backdrop.addEventListener("click", closeModal);
+  // Delegação para suportar conteúdo SPA
+  document.addEventListener("click", (e) => {
+    const openBtn = e.target.closest("[data-open-modal]");
+    if (openBtn) {
+      e.preventDefault();
+      openModal(openBtn.getAttribute("data-open-modal"));
+      return;
+    }
+    const closeBtn = e.target.closest("[data-close-modal]");
+    if (closeBtn) {
+      e.preventDefault();
+      closeModal();
+      return;
+    }
+    const alertClose = e.target.closest(".alert__close");
+    if (alertClose) {
+      e.preventDefault();
+      const alert = alertClose.closest(".alert");
+      if (alert) alert.remove();
+    }
+  });
+  const initialBackdrop = qs("[data-backdrop]");
+  if (initialBackdrop) initialBackdrop.addEventListener("click", closeModal);
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") closeModal();
   });
 
-  const form = qs("#form-cadastro");
-  if (form) {
+  // Input masks
+  function maskDigits(value, maxLen) {
+    return value.replace(/\D/g, "").slice(0, maxLen);
+  }
+  function formatCPF(v) {
+    v = maskDigits(v, 11);
+    const p1 = v.slice(0, 3),
+      p2 = v.slice(3, 6),
+      p3 = v.slice(6, 9),
+      p4 = v.slice(9, 11);
+    let out = p1;
+    if (p2) out += "." + p2;
+    if (p3) out += "." + p3;
+    if (p4) out += "-" + p4;
+    return out;
+  }
+  function formatPhone(v) {
+    v = maskDigits(v, 11);
+    const ddd = v.slice(0, 2),
+      p1 = v.slice(2, 7),
+      p2 = v.slice(7, 11);
+    let out = ddd ? `(${ddd})` : "";
+    if (p1) out += ` ${p1}`;
+    if (p2) out += `-${p2}`;
+    return out;
+  }
+  function formatCEP(v) {
+    v = maskDigits(v, 8);
+    const p1 = v.slice(0, 5),
+      p2 = v.slice(5, 8);
+    let out = p1;
+    if (p2) out += "-" + p2;
+    return out;
+  }
+
+  function bindCadastroForm(form, opts = {}) {
+    const SUCCESS_ROUTE = opts.redirectRoute || "projetos";
+    const SUCCESS_DELAY = opts.redirectDelayMs || 1400;
+    const inputs = qsa("input[required], input[pattern]", form);
+
+    const cpf = qs("#cpf", form);
+    const tel = qs("#telefone", form);
+    const cep = qs("#cep", form);
+    const uf = qs("#estado", form);
+    if (cpf)
+      cpf.addEventListener("input", () => (cpf.value = formatCPF(cpf.value)));
+    if (tel)
+      tel.addEventListener("input", () => (tel.value = formatPhone(tel.value)));
+    if (cep)
+      cep.addEventListener("input", () => (cep.value = formatCEP(cep.value)));
+    if (uf)
+      uf.addEventListener(
+        "input",
+        () =>
+          (uf.value = uf.value
+            .toUpperCase()
+            .replace(/[^A-Z]/g, "")
+            .slice(0, 2))
+      );
+
     form.addEventListener("submit", (e) => {
-      const inputs = qsa("input[required], input[pattern]", form);
       let valid = true;
       inputs.forEach((el) => {
         const isOk = el.checkValidity();
@@ -109,15 +229,113 @@
       });
       if (!valid) {
         e.preventDefault();
-        showToast("Revise os campos destacados.");
+        showToast("Revise os campos destacados.", {
+          type: "warning",
+          position: "br",
+        });
       } else {
         e.preventDefault();
-        showToast("Cadastro enviado com sucesso!");
-        form.reset();
-        inputs.forEach((el) => {
-          el.classList.remove("is-valid", "is-invalid");
+        showToast("Cadastro enviado com sucesso!", {
+          type: "success",
+          position: "br",
+          duration: 2000,
         });
+        setTimeout(() => {
+          if (window.TEMPLATES) {
+            location.hash = "#/" + SUCCESS_ROUTE;
+          } else {
+            window.location.href = SUCCESS_ROUTE + ".html";
+          }
+        }, SUCCESS_DELAY);
+        form.reset();
+        inputs.forEach((el) => el.classList.remove("is-valid", "is-invalid"));
       }
     });
   }
+
+  // Bind on static page load
+  const form = qs("#form-cadastro");
+  if (form) bindCadastroForm(form);
+
+  // Expor para uso no SPA
+  window.bindCadastroForm = bindCadastroForm;
+})();
+
+(function () {
+  const qs = (s, r = document) => r.querySelector(s);
+  if (!window.TEMPLATES) return;
+
+  const routes = {
+    home: window.TEMPLATES.home,
+    projetos: window.TEMPLATES.projetos,
+    cadastro: window.TEMPLATES.cadastro,
+  };
+  function pathToRoute() {
+    const file = location.pathname.split("/").pop() || "index.html";
+    if (file.includes("projetos")) return "projetos";
+    if (file.includes("cadastro")) return "cadastro";
+    return "home";
+  }
+  function getRouteFromHash() {
+    return location.hash.startsWith("#/") ? location.hash.slice(2) : null;
+  }
+  function render(route) {
+    const main = qs("main");
+    const tmpl = routes[route] || routes.home;
+    if (!main || !tmpl) return;
+    main.innerHTML = tmpl();
+    document.title =
+      route === "home"
+        ? "ONG Esperança Viva"
+        : `${route[0].toUpperCase()}${route.slice(1)} - ONG Esperança Viva`;
+    // bind submit on SPA-rendered cadastro
+    const form = qs("#form-cadastro");
+    if (form) {
+      // Reutiliza a função global de binding para máscaras e validação
+      if (typeof window.bindCadastroForm === "function") {
+        window.bindCadastroForm(form);
+      }
+    }
+  }
+
+  document.querySelectorAll("nav .menu > li > a").forEach((a) => {
+    a.addEventListener("click", (e) => {
+      const href = a.getAttribute("href") || "";
+      if (href.startsWith("#")) return;
+      e.preventDefault();
+      const route = href.includes("projetos")
+        ? "projetos"
+        : href.includes("cadastro")
+        ? "cadastro"
+        : "home";
+      if (location.hash !== `#/${route}`) location.hash = `#/${route}`;
+      render(route);
+    });
+  });
+
+  window.addEventListener("hashchange", () => {
+    const r = getRouteFromHash();
+    if (r) render(r);
+  });
+
+  // Intercepta qualquer link interno para rotas SPA
+  document.addEventListener("click", (e) => {
+    const a = e.target.closest("a");
+    if (!a) return;
+    const href = a.getAttribute("href") || "";
+    if (href.startsWith("#")) return; // âncoras
+    if (/^(https?:)?\/\//i.test(href)) return; // externos
+    if (!/index\.html|projetos\.html|cadastro\.html/i.test(href)) return;
+    e.preventDefault();
+    const route = href.includes("projetos")
+      ? "projetos"
+      : href.includes("cadastro")
+      ? "cadastro"
+      : "home";
+    if (location.hash !== `#/${route}`) location.hash = `#/${route}`;
+    render(route);
+  });
+
+  // inicialização
+  render(getRouteFromHash() || pathToRoute());
 })();

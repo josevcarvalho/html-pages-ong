@@ -7,49 +7,186 @@
     <link rel="stylesheet" href="./assets/css/style.css" />
   </head>
   <body>
-    <header>
-      <h1>Esperança Viva</h1>
-      <nav>
-        <ul>
-          <li><a href="index.html">Início</a></li>
-          <li><a href="projetos.html">Projetos</a></li>
-          <li><a href="cadastro.html">Cadastro</a></li>
-        </ul>
-      </nav>
-    </header>
+    <div class="site-grid">
+      <header>
+        <div class="container header-inner">
+          <nav class="navbar" aria-label="Navegação principal">
+            <div class="navbar__brand">
+              <img
+                class="navbar__logo"
+                src="./assets/imgs/logo.png"
+                alt="Logo"
+                onerror="this.style.display='none'"
+              />
+              <span>Esperança Viva</span>
+            </div>
+            <button
+              class="navbar__toggle"
+              aria-expanded="false"
+              aria-controls="menu-principal"
+            >
+              ☰ Menu
+            </button>
+            <div class="navbar__menu">
+              <ul id="menu-principal" class="menu" role="menubar">
+                <li role="none">
+                  <a role="menuitem" href="index.html">Início</a>
+                </li>
+                <li role="none" class="has-submenu">
+                  <a
+                    role="menuitem"
+                    href="projetos.html"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                    >Projetos</a
+                  >
+                  <ul class="submenu" role="menu">
+                    <li role="none">
+                      <a role="menuitem" href="projetos.html#educacao"
+                        >Educação</a
+                      >
+                    </li>
+                    <li role="none">
+                      <a role="menuitem" href="projetos.html#saude">Saúde</a>
+                    </li>
+                    <li role="none">
+                      <a role="menuitem" href="projetos.html#meio-ambiente"
+                        >Meio ambiente</a
+                      >
+                    </li>
+                  </ul>
+                </li>
+                <li role="none">
+                  <a role="menuitem" href="cadastro.html">Cadastro</a>
+                </li>
+              </ul>
+            </div>
+          </nav>
+        </div>
+      </header>
 
-    <main>
-      <section>
-        <h2>Bem-vindo à ONG Esperança Viva</h2>
-        <p>
-          Nossa missão é transformar vidas por meio da solidariedade e do
-          engajamento social.
-        </p>
-        <img src="./assets/imgs/acao.png" alt="Ação social da ONG" />
-      </section>
+      <main>
+        <div class="container">
+          <!-- Hero -->
+          <section class="grid-12 items-center">
+            <div class="col-12 col-md-7">
+              <h2 class="h2">Bem-vindo à ONG Esperança Viva</h2>
+              <p>
+                Nossa missão é transformar vidas por meio da solidariedade e do
+                engajamento social.
+              </p>
+              <div class="flex gap-2 mt-2">
+                <a class="btn" href="projetos.html">Conhecer projetos</a>
+                <a class="btn btn--light" href="cadastro.html"
+                  >Quero participar</a
+                >
+              </div>
+            </div>
+            <div class="col-12 col-md-5">
+              <img src="./assets/imgs/acao.png" alt="Ação social da ONG" />
+            </div>
+          </section>
 
-      <section>
-        <h3>Sobre Nós</h3>
-        <p>
-          Desde 2010, atuamos em comunidades vulneráveis, oferecendo educação,
-          alimentação e oportunidades.
-        </p>
-      </section>
+          <!-- Destaques -->
+          <section>
+            <h3 class="h3 mb-2">Nossos pilares</h3>
+            <div class="grid-12">
+              <div class="col-12 col-md-4">
+                <div class="card">
+                  <div class="card__body">
+                    <h4 class="card__title">Educação</h4>
+                    <p class="card__text">
+                      Projetos de reforço escolar, bolsas e capacitação
+                      profissional.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-4">
+                <div class="card">
+                  <div class="card__body">
+                    <h4 class="card__title">Saúde</h4>
+                    <p class="card__text">
+                      Campanhas de saúde preventiva e acesso a atendimentos.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-4">
+                <div class="card">
+                  <div class="card__body">
+                    <h4 class="card__title">Sustentabilidade</h4>
+                    <p class="card__text">
+                      Ações de reciclagem, hortas comunitárias e educação
+                      ambiental.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
 
-      <section>
-        <h3>Contato</h3>
-        <address>
+          <!-- Contato -->
+          <section>
+            <h3 class="h3">Contato</h3>
+            <address>
+              <p>
+                <strong>Endereço:</strong> Rua da Solidariedade, 123 - São
+                Paulo/SP
+              </p>
+              <p><strong>E-mail:</strong> contato@ongesperancaviva.org.br</p>
+              <p><strong>Telefone:</strong> (11) 99999-8888</p>
+            </address>
+          </section>
+
+          <!-- Alert demo -->
+          <div class="alert alert--info mb-3" role="alert">
+            <span>Inscrições abertas para o mutirão do fim de semana!</span>
+            <button class="alert__close" aria-label="Fechar alerta">×</button>
+          </div>
+
+          <div class="flex gap-2">
+            <button class="btn" data-open-modal="#doacaoModal">
+              Quero doar
+            </button>
+          </div>
+        </div>
+      </main>
+
+      <footer>
+        <p>&copy; 2025 ONG Esperança Viva - Todos os direitos reservados.</p>
+      </footer>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-backdrop" data-backdrop></div>
+    <div
+      id="doacaoModal"
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-hidden="true"
+    >
+      <div class="modal__dialog">
+        <div class="modal__header">
+          <h4 class="h3" id="tituloModal">Faça sua doação</h4>
+        </div>
+        <div class="modal__body">
           <p>
-            <strong>Endereço:</strong> Rua da Solidariedade, 123 - São Paulo/SP
+            Com sua contribuição, conseguimos ampliar o alcance dos nossos
+            projetos.
           </p>
-          <p><strong>E-mail:</strong> contato@ongesperancaviva.org.br</p>
-          <p><strong>Telefone:</strong> (11) 99999-8888</p>
-        </address>
-      </section>
-    </main>
+        </div>
+        <div class="modal__footer flex justify-between">
+          <button class="btn btn--light" data-close-modal>Fechar</button>
+          <a class="btn" href="cadastro.html">Continuar</a>
+        </div>
+      </div>
+    </div>
 
-    <footer>
-      <p>&copy; 2025 ONG Esperança Viva - Todos os direitos reservados.</p>
-    </footer>
+    <!-- Toasts -->
+    <div class="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+    <script src="./assets/js/main.js"></script>
   </body>
 </html>

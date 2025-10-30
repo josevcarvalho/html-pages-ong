@@ -7,47 +7,211 @@
     <link rel="stylesheet" href="./assets/css/style.css" />
   </head>
   <body>
-    <header>
-      <h1>Esperança Viva</h1>
-      <nav>
-        <ul>
-          <li><a href="index.html">Início</a></li>
-          <li><a href="projetos.html">Projetos</a></li>
-          <li><a href="cadastro.html">Cadastro</a></li>
-        </ul>
-      </nav>
-    </header>
+    <div class="site-grid">
+      <header>
+        <div class="container header-inner">
+          <nav class="navbar" aria-label="Navegação principal">
+            <div class="navbar__brand">
+              <img
+                class="navbar__logo"
+                src="./assets/imgs/logo.png"
+                alt="Logo"
+                onerror="this.style.display='none'"
+              />
+              <span>Esperança Viva</span>
+            </div>
+            <button
+              class="navbar__toggle"
+              aria-expanded="false"
+              aria-controls="menu-principal"
+            >
+              ☰ Menu
+            </button>
+            <div class="navbar__menu">
+              <ul id="menu-principal" class="menu" role="menubar">
+                <li role="none">
+                  <a role="menuitem" href="index.html">Início</a>
+                </li>
+                <li role="none" class="has-submenu">
+                  <a
+                    role="menuitem"
+                    href="projetos.html"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                    >Projetos</a
+                  >
+                  <ul class="submenu" role="menu">
+                    <li role="none">
+                      <a role="menuitem" href="#educacao">Educação</a>
+                    </li>
+                    <li role="none">
+                      <a role="menuitem" href="#saude">Saúde</a>
+                    </li>
+                    <li role="none">
+                      <a role="menuitem" href="#meio-ambiente">Meio ambiente</a>
+                    </li>
+                  </ul>
+                </li>
+                <li role="none">
+                  <a role="menuitem" href="cadastro.html">Cadastro</a>
+                </li>
+              </ul>
+            </div>
+          </nav>
+        </div>
+      </header>
 
-    <main>
-      <article>
-        <h2>Projetos Sociais</h2>
-        <p>
-          Conheça nossos projetos e veja como você pode contribuir para um mundo
-          melhor.
-        </p>
-      </article>
+      <main>
+        <div class="container">
+          <article class="mb-3">
+            <h2 class="h2">Projetos Sociais</h2>
+            <p>
+              Conheça nossos projetos e veja como você pode contribuir para um
+              mundo melhor.
+            </p>
+          </article>
 
-      <section>
-        <h3>Voluntariado</h3>
-        <p>
-          Participe como voluntário em ações de educação, saúde e
-          sustentabilidade.
-        </p>
-        <img src="./assets/imgs/voluntariado.png" alt="Voluntários em ação" />
-      </section>
+          <section id="educacao">
+            <h3 class="h3 mb-2">Educação</h3>
+            <div class="grid-12">
+              <div class="col-12 col-md-6 col-lg-4">
+                <div class="card">
+                  <div class="card__media">
+                    <img
+                      src="./assets/imgs/voluntariado.png"
+                      alt="Reforço escolar"
+                    />
+                  </div>
+                  <div class="card__body">
+                    <h4 class="card__title">Reforço escolar</h4>
+                    <p class="card__text">
+                      Aulas de apoio para crianças e adolescentes.
+                    </p>
+                    <div class="card__footer">
+                      <span class="badge badge--success">Ativo</span>
+                      <span class="tag tag--primary">Educação</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-6 col-lg-4">
+                <div class="card">
+                  <div class="card__media">
+                    <img src="./assets/imgs/acao.png" alt="Capacitação" />
+                  </div>
+                  <div class="card__body">
+                    <h4 class="card__title">Capacitação profissional</h4>
+                    <p class="card__text">
+                      Cursos rápidos focados em empregabilidade.
+                    </p>
+                    <div class="card__footer">
+                      <span class="badge badge--warning">Inscrições</span>
+                      <span class="tag tag--primary">Educação</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
 
-      <section>
-        <h3>Doações</h3>
-        <p>
-          Suas doações ajudam a manter nossos projetos ativos. Faça parte dessa
-          corrente do bem!
-        </p>
-        <img src="assets/imgs/doacoes.png" alt="Campanha de doações" />
-      </section>
-    </main>
+          <section id="saude">
+            <h3 class="h3 mb-2">Saúde</h3>
+            <div class="grid-12">
+              <div class="col-12 col-md-6 col-lg-4">
+                <div class="card">
+                  <div class="card__media">
+                    <img
+                      src="./assets/imgs/acao.png"
+                      alt="Campanhas de vacinação"
+                    />
+                  </div>
+                  <div class="card__body">
+                    <h4 class="card__title">Campanhas de vacinação</h4>
+                    <p class="card__text">
+                      Apoio logístico e mobilização comunitária.
+                    </p>
+                    <div class="card__footer">
+                      <span class="badge badge--success">Ativo</span>
+                      <span class="tag tag--primary">Saúde</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-6 col-lg-4">
+                <div class="card">
+                  <div class="card__media">
+                    <img
+                      src="./assets/imgs/doacoes.png"
+                      alt="Mutirões de saúde"
+                    />
+                  </div>
+                  <div class="card__body">
+                    <h4 class="card__title">Mutirões de saúde</h4>
+                    <p class="card__text">
+                      Atendimentos básicos em comunidades.
+                    </p>
+                    <div class="card__footer">
+                      <span class="badge badge--warning">Em breve</span>
+                      <span class="tag tag--primary">Saúde</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
 
-    <footer>
-      <p>&copy; 2025 ONG Esperança Viva</p>
-    </footer>
+          <section id="meio-ambiente">
+            <h3 class="h3 mb-2">Meio ambiente</h3>
+            <div class="grid-12">
+              <div class="col-12 col-md-6 col-lg-4">
+                <div class="card">
+                  <div class="card__media">
+                    <img src="./assets/imgs/acao.png" alt="Horta comunitária" />
+                  </div>
+                  <div class="card__body">
+                    <h4 class="card__title">Horta comunitária</h4>
+                    <p class="card__text">
+                      Produção local de alimentos e oficinas.
+                    </p>
+                    <div class="card__footer">
+                      <span class="badge badge--success">Ativo</span>
+                      <span class="tag tag--primary">Sustentabilidade</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-6 col-lg-4">
+                <div class="card">
+                  <div class="card__media">
+                    <img
+                      src="./assets/imgs/voluntariado.png"
+                      alt="Recicla bairro"
+                    />
+                  </div>
+                  <div class="card__body">
+                    <h4 class="card__title">Recicla bairro</h4>
+                    <p class="card__text">
+                      Pontos de coleta, triagem e educação ambiental.
+                    </p>
+                    <div class="card__footer">
+                      <span class="badge badge--danger"
+                        >Precisa de doações</span
+                      >
+                      <span class="tag tag--primary">Meio ambiente</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </main>
+
+      <footer>
+        <p>&copy; 2025 ONG Esperança Viva</p>
+      </footer>
+    </div>
+
+    <script src="./assets/js/main.js"></script>
   </body>
 </html>

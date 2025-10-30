@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="./assets/css/style.css" />
   </head>
   <body>
+    <a class="skip-link" href="#conteudo">Pular para o conteúdo principal</a>
     <div class="site-grid">
       <header>
         <div class="container header-inner">
@@ -27,6 +28,28 @@
             >
               ☰ Menu
             </button>
+            <div
+              class="navbar__actions"
+              role="group"
+              aria-label="Preferências de exibição"
+            >
+              <button
+                class="btn btn--outline"
+                data-theme-toggle
+                aria-pressed="false"
+                title="Alternar modo claro/escuro"
+              >
+                Modo escuro
+              </button>
+              <button
+                class="btn btn--outline"
+                data-contrast-toggle
+                aria-pressed="false"
+                title="Ativar alto contraste"
+              >
+                Alto contraste
+              </button>
+            </div>
             <div class="navbar__menu">
               <ul id="menu-principal" class="menu" role="menubar">
                 <li role="none">
@@ -65,7 +88,7 @@
         </div>
       </header>
 
-      <main>
+      <main id="conteudo" tabindex="-1">
         <div class="container">
           <!-- Hero -->
           <section class="grid-12 items-center">
@@ -186,6 +209,13 @@
 
     <!-- Toasts -->
     <div class="toast-container" aria-live="polite" aria-atomic="true"></div>
+    <div
+      id="sr-status"
+      class="sr-only"
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+    ></div>
 
     <script src="./assets/js/templates.js"></script>
     <script src="./assets/js/main.js"></script>

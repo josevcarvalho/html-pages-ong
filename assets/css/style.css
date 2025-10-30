@@ -6,6 +6,12 @@
   --cor-destaque: #f4b400;
   --fonte-principal: "Segoe UI", Arial, sans-serif;
 
+  /* A11y tokens */
+  --focus-ring: #0f766e; /* teal 700 */
+  --focus-ring-contrast: #0f766e;
+  --link-color: #1f5f55;
+  --link-hover: #0f3f38;
+
   --color-primary-800: #184b42;
   --color-primary-700: #1f5f55;
   --color-primary-600: #236359;
@@ -61,6 +67,34 @@ body {
   flex-direction: column;
 }
 
+/* Visually hidden (screen reader only) */
+.sr-only {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Skip link */
+.skip-link {
+  position: absolute;
+  left: 8px;
+  top: -100px;
+  background: #000;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 6px;
+  z-index: 1000;
+}
+.skip-link:focus {
+  top: 8px;
+}
+
 header {
   background-color: var(--cor-principal);
   color: white;
@@ -106,6 +140,16 @@ main {
   max-width: 1000px;
   margin: 2rem auto;
   flex: 1;
+}
+
+/* Content links */
+main a:not(.btn) {
+  color: var(--link-color);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+main a:not(.btn):hover {
+  color: var(--link-hover);
 }
 
 h2,
@@ -248,9 +292,15 @@ footer {
 }
 
 :is(button, .btn, a, input, textarea, select) :where(:focus, :focus-visible) {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(42, 123, 111, 0.12);
-  border-color: var(--cor-principal);
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+/* Stronger focus for keyboard users */
+:is(a, button, input, textarea, select, summary, [tabindex]):focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
 }
 .container {
   width: min(92%, var(--container-lg));
@@ -285,6 +335,11 @@ footer {
 .navbar__menu {
   justify-self: end;
 }
+.navbar__actions {
+  display: flex;
+  gap: var(--space-1);
+  justify-self: end;
+}
 .navbar__toggle {
   display: none;
   background: transparent;
@@ -312,6 +367,9 @@ footer {
   background-color: rgba(255, 255, 255, 0.15);
   outline: none;
 }
+.menu a[aria-current="page"] {
+  background-color: rgba(255, 255, 255, 0.22);
+}
 .menu > li {
   position: relative;
 }
@@ -337,6 +395,10 @@ footer {
 }
 .menu > li:hover > .submenu,
 .menu > li:focus-within > .submenu {
+  display: block;
+}
+/* Show submenu when parent toggled via aria-expanded */
+.has-submenu > a[aria-expanded="true"] + .submenu {
   display: block;
 }
 
@@ -725,7 +787,7 @@ footer {
     width: min(92%, var(--container-md));
   }
   .navbar {
-    grid-template-columns: auto 1fr;
+    grid-template-columns: auto 1fr auto;
   }
   .navbar__menu {
     grid-column: 2 / -1;
@@ -834,6 +896,11 @@ footer {
   .navbar__menu {
     grid-column: 1 / -1;
   }
+  .navbar__actions {
+    grid-column: 1 / -1;
+    justify-self: start;
+    margin-top: var(--space-1);
+  }
   .navbar__toggle {
     display: inline-flex;
   }
@@ -847,4 +914,129 @@ footer {
   .menu.show {
     display: flex;
   }
+}
+
+/* Dark theme */
+[data-theme="dark"] {
+  --cor-fundo: #0d1216;
+  --cor-texto: #e5e7eb;
+  --cor-secundaria: #12242a;
+  --cor-principal: #1f5f55;
+  --link-color: #8be9dd;
+  --link-hover: #5bc8b8;
+  --focus-ring: #f4b400;
+}
+[data-theme="dark"] body {
+  background-color: var(--cor-fundo);
+  color: var(--cor-texto);
+}
+[data-theme="dark"] :is(header, footer, .navbar) {
+  background-color: var(--cor-principal);
+  color: #fff;
+}
+[data-theme="dark"] .card,
+[data-theme="dark"] .modal__dialog,
+[data-theme="dark"] .submenu,
+[data-theme="dark"] form {
+  background: #111827;
+  color: var(--cor-texto);
+  border-color: #1f2937;
+}
+[data-theme="dark"] .submenu li a {
+  color: var(--cor-texto);
+}
+[data-theme="dark"] .card__title {
+  color: #f9fafb;
+}
+[data-theme="dark"] .card__text {
+  color: #d1d5db;
+}
+[data-theme="dark"] .modal__header,
+[data-theme="dark"] .modal__footer {
+  background: #0b0f14;
+}
+[data-theme="dark"] .badge--success {
+  background: #103a12;
+  color: #86efac;
+}
+[data-theme="dark"] .badge--warning {
+  background: #3a2106;
+  color: #ffdd99;
+}
+[data-theme="dark"] .badge--danger {
+  background: #3a0d0d;
+  color: #ff9aa2;
+}
+[data-theme="dark"] .tag--primary {
+  background: #0f2d29;
+  color: #8be9dd;
+}
+[data-theme="dark"] .alert--info {
+  background: #0b2533;
+  color: #9bd1ff;
+  border-color: #164156;
+}
+[data-theme="dark"] .alert--success {
+  background: #0f1f12;
+  color: #b9f6ca;
+  border-color: #1b5e20;
+}
+[data-theme="dark"] .alert--warning {
+  background: #2a1805;
+  color: #ffd8a8;
+  border-color: #8d4e00;
+}
+[data-theme="dark"] .alert--danger {
+  background: #2a0f10;
+  color: #ffb3b8;
+  border-color: #7f1d1d;
+}
+
+/* High contrast mode */
+[data-contrast="high"] {
+  --cor-fundo: #000;
+  --cor-texto: #fff;
+  --cor-principal: #000;
+  --cor-secundaria: #000;
+  --link-color: #00ffff;
+  --link-hover: #00a3a3;
+  --focus-ring: #ffff00;
+}
+[data-contrast="high"] body {
+  background: #000 !important;
+  color: #fff !important;
+}
+[data-contrast="high"] :is(header, footer, .navbar) {
+  background: #000 !important;
+  color: #fff !important;
+  border-bottom: 3px solid #fff;
+}
+[data-contrast="high"] .btn {
+  background: #fff !important;
+  color: #000 !important;
+  border: 3px solid #fff !important;
+}
+[data-contrast="high"] .btn--outline {
+  background: #000 !important;
+  color: #fff !important;
+  border: 3px solid #fff !important;
+}
+[data-contrast="high"]
+  :is(.card, .modal__dialog, .submenu, form, .alert, .toast) {
+  background: #000 !important;
+  color: #fff !important;
+  border: 3px solid #fff !important;
+  box-shadow: none !important;
+}
+[data-contrast="high"] .submenu li a {
+  color: #fff !important;
+}
+[data-contrast="high"] a:not(.btn) {
+  color: #00ffff !important;
+  text-decoration: underline !important;
+}
+[data-contrast="high"]
+  :is(a, button, input, textarea, select, [tabindex]):focus-visible {
+  outline: 4px solid #ffff00 !important;
+  outline-offset: 3px !important;
 }
